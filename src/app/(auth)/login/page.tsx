@@ -1,54 +1,74 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { login } from "@/utils/auth"
-import { useToast } from "@/hooks/use-toast"
-import Layout from "@/components/Layout/Layout"
-import { setCookie } from "nookies"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
+import Layout from "@/components/Layout/Layout";
 
 export default function Login() {
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const router = useRouter()
-    const { toast } = useToast()
+    const [cnic, setCnic] = useState("");
+    const [password, setPassword] = useState("");
+    const router = useRouter();
+    const { toast } = useToast();
 
     const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-            const response = await login(email, password)
-            localStorage.setItem("accessToken", response.accessToken)
+        e.preventDefault();
 
-            toast({
-                title: "Logged in successfully",
-                description: "Welcome back!",
-            })
-            router.push("/")
+        try {
+            const response = await fetch("http://localhost:8000/api/v1/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ cnic, password }),
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // Save token to localStorage or cookies
+                localStorage.setItem("accessToken", data.accessToken);
+
+                toast({
+                    title: "Logged in successfully",
+                    description: "Welcome back!",
+                });
+
+                // Navigate to home page
+                router.push("/");
+            } else {
+                toast({
+                    title: "Error",
+                    description: data.message || "Invalid CNIC or password.",
+                    variant: "destructive",
+                });
+            }
         } catch (error) {
             toast({
                 title: "Error",
-                description: "Invalid email or password.",
+                description: "Something went wrong. Please try again later.",
                 variant: "destructive",
-            })
+            });
         }
-    }
+    };
 
     return (
         <Layout>
             <form onSubmit={handleSubmit} className="space-y-6">
                 <div>
-                    <Label htmlFor="email">Email address</Label>
+                    <Label htmlFor="cnic">CNIC</Label>
                     <Input
-                        id="email"
-                        name="email"
-                        type="email"
+                        id="cnic"
+                        name="cnic"
+                        type="text"
+                        placeholder="Enter your CNIC"
                         required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={cnic}
+                        onChange={(e) => setCnic(e.target.value)}
                     />
                 </div>
                 <div>
@@ -57,6 +77,7 @@ export default function Login() {
                         id="password"
                         name="password"
                         type="password"
+                        placeholder="Enter your password"
                         required
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -72,6 +93,5 @@ export default function Login() {
                 </Link>
             </div>
         </Layout>
-    )
+    );
 }
-
