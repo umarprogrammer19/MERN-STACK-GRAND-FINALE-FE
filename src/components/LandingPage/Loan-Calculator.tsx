@@ -4,12 +4,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
 import { useLoanCalculator } from '@/context/loanContext';
+import UserDetailsPopup from './userDetailsPopUp';
 
 const LoanCalculator: React.FC = () => {
     const { setLoanDetails } = useLoanCalculator();
     const [category, setCategory] = useState<string>('');
     const [deposit, setDeposit] = useState<string>('');
     const [loanPeriod, setLoanPeriod] = useState<string>('');
+    const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
     const handleCalculate = (e: React.FormEvent) => {
         e.preventDefault();
@@ -30,7 +32,7 @@ const LoanCalculator: React.FC = () => {
         };
 
         setLoanDetails(calculatedValues);
-        alert('Loan details saved in context!');
+        setIsPopupOpen(true); // Open the popup after saving loan details
     };
 
     return (
@@ -83,6 +85,7 @@ const LoanCalculator: React.FC = () => {
                     </Button>
                 </form>
             </div>
+            {isPopupOpen && <UserDetailsPopup onClose={() => setIsPopupOpen(false)} />}
         </section>
     );
 };
