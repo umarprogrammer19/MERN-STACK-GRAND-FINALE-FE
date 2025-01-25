@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
 import { ArrowRight, Calculator, Home, Briefcase, GraduationCap, Heart } from "lucide-react"
 import LoanCalculator from "@/components/LandingPage/Loan-Calculator"
+import { LoanCalculatorProvider } from "@/context/loanContext"
 
 export default function LandingPage() {
   return (
@@ -73,7 +74,9 @@ export default function LandingPage() {
       </section>
 
       {/* Loan Calculator */}
-      <LoanCalculator />
+      <LoanCalculatorProvider>
+        <LoanCalculator />
+      </LoanCalculatorProvider>
 
       {/* Testimonials */}
       <section className="py-16 px-6 bg-white">
