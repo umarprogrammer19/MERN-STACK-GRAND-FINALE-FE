@@ -1,34 +1,51 @@
 import React, { useState } from 'react';
-import { Input } from '../ui/input';
 import { Button } from '../ui/button';
-import { useLoanCalculator } from '@/context/loanContext';
+import { Input } from '../ui/input';
+import { useRouter } from 'next/navigation';
 
 interface UserDetailsPopupProps {
     onClose: () => void;
 }
 
 const UserDetailsPopup: React.FC<UserDetailsPopupProps> = ({ onClose }) => {
-    const { loanDetails, setLoanDetails } = useLoanCalculator();
     const [cnic, setCnic] = useState<string>('');
     const [email, setEmail] = useState<string>('');
     const [name, setName] = useState<string>('');
+    const [loading, setLoading] = useState<boolean>(false); // To handle loading state
+    const router = useRouter(); // React Router hook for navigation
 
-    const handleSave = () => {
+    const handleSave = async () => {
         if (!cnic || !email || !name) {
             alert('Please fill all fields.');
             return;
         }
 
-        // Merge user details with loan details in context
-        // setLoanDetails({
-        //     ...loanDetails,
-        //     cnic,
-        //     email,
-        //     name,
-        // });
+        setLoading(true);
 
-        alert('User details saved successfully!');
-        onClose(); // Close the popup
+        try {
+            const response = await fetch('http://localhost:8000/api/v1/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cnic, email, name }),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                alert('User registered successfully!');
+                onClose();
+                router.push('/login');
+            } else {
+                alert(result.message || 'Registration failed.');
+            }
+        } catch (error) {
+            console.error('Error during registration:', error);
+            alert('An error occurred. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -63,11 +80,15 @@ const UserDetailsPopup: React.FC<UserDetailsPopupProps> = ({ onClose }) => {
                     />
                 </div>
                 <div className="flex justify-end gap-4">
-                    <Button className="bg-gray-500 text-white" onClick={onClose}>
+                    <Button className="bg-gray-500 text-white" onClick={onClose} disabled={loading}>
                         Cancel
                     </Button>
-                    <Button className="bg-blue-600 text-white" onClick={handleSave}>
-                        Save
+                    <Button
+                        className="bg-blue-600 text-white"
+                        onClick={handleSave}
+                        disabled={loading}
+                    >
+                        {loading ? 'Saving...' : 'Save'}
                     </Button>
                 </div>
             </div>
