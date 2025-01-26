@@ -1,38 +1,55 @@
-import React, { useState } from 'react';
 import { Calculator } from 'lucide-react';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Input } from '../ui/input';
+import React, { useState } from 'react';
 import { Button } from '../ui/button';
-import { useLoanCalculator } from '@/context/loanContext';
+import { Input } from '../ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 import UserDetailsPopup from './userDetailsPopUp';
 
 const LoanCalculator: React.FC = () => {
-    const { setLoanDetails } = useLoanCalculator();
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [category, setCategory] = useState<string>('');
-    const [deposit, setDeposit] = useState<string>('');
+    const [subcategory, setSubCategory] = useState<string>('');
+    const [loanAmount, setLoanAmount] = useState<string>('');
     const [loanPeriod, setLoanPeriod] = useState<string>('');
-    const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
+
+    const subCategories: Record<string, string[]> = {
+        wedding: ['Valima', 'Furniture', 'Valima Food', 'Jahez'],
+        home: ['Structure', 'Finishing', 'Loan'],
+        business: ['Buy Stall', 'Advance Rent for Shop', 'Shop Assets', 'Shop Machinery'],
+        education: ['University Fees', 'Child Fees Loan'],
+    };
+
+    const maxLoanAmounts: Record<string, number> = {
+        wedding: 500000,
+        home: 1000000,
+        business: 1000000,
+        education: Number.MAX_VALUE, // No maximum defined
+    };
 
     const handleCalculate = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!category || !deposit || !loanPeriod) {
+        if (!category || !subcategory || !loanAmount || !loanPeriod) {
             alert('Please fill all fields.');
             return;
         }
 
-        const depositValue = parseFloat(deposit);
+        const loanAmountValue = parseFloat(loanAmount);
         const loanPeriodValue = parseInt(loanPeriod, 10);
 
-        const calculatedValues = {
+        if (loanAmountValue > maxLoanAmounts[category]) {
+            alert(`Maximum loan amount for ${category} is PKR ${maxLoanAmounts[category]}.`);
+            return;
+        }
+
+        const loanDetails = {
             category,
-            deposit: depositValue,
+            subcategory,
+            amount: loanAmountValue,
             loanPeriod: loanPeriodValue,
-            totalAmount: depositValue * 1.2, // Example calculation logic
-            monthlyInstallment: (depositValue * 1.2) / (loanPeriodValue * 12),
         };
 
-        setLoanDetails(calculatedValues);
-        setIsPopupOpen(true); // Open the popup after saving loan details
+        localStorage.setItem('loanDetail', JSON.stringify(loanDetails));
+        setIsPopupOpen(true);
     };
 
     return (
@@ -57,14 +74,31 @@ const LoanCalculator: React.FC = () => {
                             </SelectContent>
                         </Select>
                     </div>
+                    {category && (
+                        <div>
+                            <label className="block mb-3 text-sm font-semibold text-gray-700">Select Subcategory</label>
+                            <Select onValueChange={(value) => setSubCategory(value)}>
+                                <SelectTrigger className="bg-white border-gray-300 text-gray-800">
+                                    <SelectValue placeholder="Choose a subcategory" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {subCategories[category].map((subCat, index) => (
+                                        <SelectItem key={index} value={subCat}>
+                                            {subCat}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    )}
                     <div>
-                        <label className="block mb-3 text-sm font-semibold text-gray-700">Initial Deposit (PKR)</label>
+                        <label className="block mb-3 text-sm font-semibold text-gray-700">Loan Amount (PKR)</label>
                         <Input
                             type="number"
-                            placeholder="Enter amount"
+                            placeholder="Enter loan amount"
                             className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
-                            value={deposit}
-                            onChange={(e) => setDeposit(e.target.value)}
+                            value={loanAmount}
+                            onChange={(e) => setLoanAmount(e.target.value)}
                         />
                     </div>
                     <div>
@@ -81,7 +115,7 @@ const LoanCalculator: React.FC = () => {
                         type="submit"
                         className="col-span-2 bg-blue-600 px-8 py-4 font-semibold text-lg rounded-full hover:bg-blue-700 shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center gap-2 text-white"
                     >
-                        Calculate <Calculator className="w-5 h-5" />
+                        Save Loan Details
                     </Button>
                 </form>
             </div>

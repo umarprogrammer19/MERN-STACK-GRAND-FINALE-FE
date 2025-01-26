@@ -74,9 +74,7 @@ export default function LandingPage() {
       </section>
 
       {/* Loan Calculator */}
-      <LoanCalculatorProvider>
         <LoanCalculator />
-      </LoanCalculatorProvider>
 
       {/* Testimonials */}
       <section className="py-16 px-6 bg-white">
