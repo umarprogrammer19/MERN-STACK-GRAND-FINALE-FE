@@ -24,7 +24,7 @@ export default function LandingPage() {
           Experience a seamless loan application process tailored to your needs. Discover flexible options and take the
           next step towards your aspirations.
         </p>
-        <Button className="bg-blue-600 px-8 py-6 font-semibold text-lg rounded-full hover:bg-blue-700 shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center gap-2 text-white">
+        <Button className="bg-blue-600 mx-auto px-8 py-6 font-semibold text-lg rounded-full hover:bg-blue-700 shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center gap-2 text-white">
           Apply Now <ArrowRight className="w-5 h-5" />
         </Button>
       </section>
@@ -74,7 +74,7 @@ export default function LandingPage() {
       </section>
 
       {/* Loan Calculator */}
-        <LoanCalculator />
+      <LoanCalculator />
 
       {/* Testimonials */}
       <section className="py-16 px-6 bg-white">

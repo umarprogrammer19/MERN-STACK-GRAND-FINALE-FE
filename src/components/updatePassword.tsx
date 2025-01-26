@@ -1,3 +1,5 @@
+"use client";
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 interface UpdatePasswordPopupProps {
@@ -6,7 +8,7 @@ interface UpdatePasswordPopupProps {
 
 const UpdatePasswordPopup: React.FC<UpdatePasswordPopupProps> = ({ onClose }) => {
     const [newPassword, setNewPassword] = useState<string>('');
-
+    const router = useRouter()
     const handleUpdate = async () => {
         if (!newPassword) {
             alert('Please enter a new password.');
@@ -29,6 +31,7 @@ const UpdatePasswordPopup: React.FC<UpdatePasswordPopupProps> = ({ onClose }) =>
 
             if (response.ok) {
                 alert('Password updated successfully!');
+                router.push("/getLoan")
                 onClose(); // Close the popup after successful update
             } else {
                 alert(`Error: ${data.message}`);

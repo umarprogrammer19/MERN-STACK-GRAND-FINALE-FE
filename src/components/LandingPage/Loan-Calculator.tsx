@@ -102,6 +102,16 @@ const LoanCalculator: React.FC = () => {
                         />
                     </div>
                     <div>
+                        <label className="block mb-3 text-sm font-semibold text-gray-700">Deposite (PKR)</label>
+                        <Input
+                            type="number"
+                            placeholder="Enter loan amount"
+                            className="bg-white border-gray-300 text-gray-800 placeholder-gray-400"
+                            // value={loanAmount}
+                            // onChange={(e) => setLoanAmount(e.target.value)}
+                        />
+                    </div>
+                    <div>
                         <label className="block mb-3 text-sm font-semibold text-gray-700">Loan Period (Years)</label>
                         <Input
                             type="number"

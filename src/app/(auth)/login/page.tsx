@@ -39,7 +39,7 @@ export default function Login() {
                 });
 
                 // Navigate to home page
-                router.push("/");
+                router.push("/loandetails");
             } else {
                 toast({
                     title: "Error",
