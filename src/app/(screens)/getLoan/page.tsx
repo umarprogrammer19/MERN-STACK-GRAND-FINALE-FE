@@ -39,7 +39,7 @@ const LoanRequestPage: React.FC = () => {
 
         try {
             setIsLoading(true);
-            const response = await fetch('http://localhost:8000/api/v2/getUserLoanRequest', {
+            const response = await fetch('https://finance-management-19.koyeb.app/api/v2/getUserLoanRequest', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -9,7 +9,7 @@ const AdminDashboard: React.FC = () => {
     useEffect(() => {
         const fetchApplications = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/admin/getApp', {
+                const response = await fetch('https://finance-management-19.koyeb.app/api/admin/getApp', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -132,7 +132,7 @@ const AdminDashboard: React.FC = () => {
 
     async function handleStatusUpdate(applicationId: string, status: string) {
         try {
-            const response = await fetch(`http://localhost:8000/api/admin/updateApp/${applicationId}`, {
+            const response = await fetch(`https://finance-management-19.koyeb.app/api/admin/updateApp/${applicationId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

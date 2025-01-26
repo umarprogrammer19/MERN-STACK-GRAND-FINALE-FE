@@ -23,7 +23,7 @@ const UserDetailsPopup: React.FC<UserDetailsPopupProps> = ({ onClose }) => {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:8000/api/v1/signup', {
+            const response = await fetch('https://finance-management-19.koyeb.app/api/v1/signup', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

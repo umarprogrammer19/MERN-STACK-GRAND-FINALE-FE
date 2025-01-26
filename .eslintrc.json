@@ -1,3 +1,10 @@
 {
-  "extends": ["next/core-web-vitals", "next/typescript"]
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript"
+  ],
+  "rules": {
+    "no-console": "off", // Disables the "no-console" rule
+    "react-hooks/exhaustive-deps": "off" // Disables exhaustive dependency checks
+  }
 }

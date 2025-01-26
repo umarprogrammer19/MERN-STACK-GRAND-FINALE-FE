@@ -1,13 +1,9 @@
 "use client"
 
-import React from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select"
-import { ArrowRight, Calculator, Home, Briefcase, GraduationCap, Heart } from "lucide-react"
 import LoanCalculator from "@/components/LandingPage/Loan-Calculator"
-import { LoanCalculatorProvider } from "@/context/loanContext"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { ArrowRight, Briefcase, GraduationCap, Heart, Home } from "lucide-react"
 
 export default function LandingPage() {
   return (
